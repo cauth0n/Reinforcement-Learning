@@ -11,7 +11,7 @@ public class Racer {
 	private int xPos;
 	private int yPos;
 	private int xVel;
-	private int yVel;
+	private int yVel; 
 
 	/**
 	 * Constructor. Velocities are initialized to 0.
