@@ -10,7 +10,7 @@ public class Main {
 	private final String oTrack = "O-track.txt";
 	private final String rTrack = "R-track.txt";
 	private final String practiceTrack = "Practice-Track.txt";
-	private State racerLessBoard;
+	private Race_Track racerLessBoard;
 
 	public Main(String directory) {
 
@@ -22,7 +22,7 @@ public class Main {
 			String[] size = fileIn.nextLine().split(",");
 			int rows = Integer.parseInt(size[0]);
 			int cols = Integer.parseInt(size[1]);
-			racerLessBoard = new State(rows, cols);
+			racerLessBoard = new Race_Track(rows, cols);
 			for (int i = 0; i < rows; i++) {
 				String line = fileIn.nextLine();
 				for (int j = 0; j < cols; j++) {
@@ -51,7 +51,7 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new Main("/home/cauth0n/Documents/workspace/Reinforcement-Learning/");
+		new Main("G:/Code/Reinforcement Learning/");
 
 	}
 

@@ -3,48 +3,71 @@ package Racetrack;
 import java.util.ArrayList;
 
 public class Simulator {
-	private Learner leaner;
-	private State racerlessBoard;
-	private State currentState;
+	private final int lowAcc = -1;
+	private final int highAcc = 1;
+	private final double gamma = .8;
+	private final double error = .5;
+
+	private Printer p;
+	private Learner learner;
+	private Race_Track racerlessBoard;
+	private Race_Track currentState;
+	private ArrayList<XYPair> start;
+	private ArrayList<XYPair> finish;
 	private MDP mdp;
 	private Racer racer;
 	private int rows;
 	private int cols;
 
-	public Simulator(State racerLessBoard) {
+	public Simulator(Race_Track racerLessBoard) {
 		this.racerlessBoard = racerLessBoard;
+		p = new Printer();
 		rows = racerLessBoard.getWidth();
 		cols = racerLessBoard.getHeight();
-		currentState = new State(racerLessBoard);
+		currentState = new Race_Track(racerLessBoard);
+		p.printTrack(racerLessBoard);
+		startFinishInit();
 		// racerMove();
 		constructMDP();
-		// learn();// !
+		 learn();// !
 	}
 
-	public void racerInit() {
+	public void startFinishInit() {
 		boolean foundStart = false;
-		int i = 0;
-		int j = 0;
-		while (!foundStart) {
-			if (j == currentState.getWidth() - 1) {
-				i++;
-				j = 0;
-			}
-			if (currentState.getTile(i, j) == 'S') {
-				foundStart = true;
-
-			} else {
-				j++;
+		start = new ArrayList<XYPair>();
+		finish = new ArrayList<XYPair>();
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				if (racerlessBoard.getTile(i, j) == 'S') {
+					start.add(new XYPair(i, j));
+				}
+				if (racerlessBoard.getTile(i, j) == 'F') {
+					finish.add(new XYPair(i, j));
+				}
 			}
 		}
-		XYPair racerStart = new XYPair(i, j);
-		currentState.setRacerPosition(racerStart);
-		racer = new Racer(racerStart);
+		if (start.isEmpty() || finish.isEmpty()) {
+			p.println("No start or finish state found.");
+		}
+
+		// currentState.setRacerPosition(racerStart);
+		// racer = new Racer(racerStart);
 	}
 
 	public void constructMDP() {
 		ArrayList<State> allStates = getAllRideableStates();
-		mdp = new MDP(allStates);
+		ArrayList<Action> allActions = getAllActions();
+		mdp = new MDP(allStates, allActions);
+	}
+
+	public ArrayList<Action> getAllActions() {
+		ArrayList<Action> actions = new ArrayList<Action>();
+		for (int i = lowAcc; i <= highAcc; i++) {
+			for (int j = lowAcc; j <= highAcc; j++) {
+				actions.add(new Action(new XYPair(i, j)));
+			}
+		}
+		return actions;
 	}
 
 	public ArrayList<State> getAllRideableStates() {
@@ -53,50 +76,17 @@ public class Simulator {
 			for (int j = 0; j < cols; j++) {
 				char tile = currentState.getTile(i, j);
 				if (tile == '.' || tile == 'S' || tile == 'F') {
-					State temp = new State(racerlessBoard);
-					temp.setTile(i, j, 'R');
-					temp.buildActions();
+					State temp = new State(new XYPair(i, j), new XYPair(0, 0));
 					allStates.add(temp);
 				}
 			}
 		}
-		printStates(allStates);
+		p.printStates(allStates);
 		return allStates;
 	}
 
 	public void learn() {
-
+		learner = new Value_Iteration(mdp, error, gamma);
 	}
 
-	public void printState(State state) {
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				print(state.getTile(i, j) + "");
-			}
-			println("");
-		}
-	}
-
-	public void printStates(ArrayList<State> states) {
-		for (State state : states) {
-			printState(state);
-		}
-	}
-
-	public void print(String line) {
-		System.out.print(line);
-	}
-
-	public void printActions(State state) {
-		println("Actions from state: ");
-		printState(state);
-		for (int i = 0; i < state.getActions().size(); i++) {
-			println(i + ": (" + state.getActions().get(i).getXAcc() + ", "
-					+ state.getActions().get(i).getYAcc() + ")");
-		}
-	}
-
-	public void println(String line) {
-		System.out.println(line);
-	}
 }
