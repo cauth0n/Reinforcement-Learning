@@ -26,19 +26,19 @@ public class Value_Iteration extends Learner {
 		loopingPlan = plan;
 		ArrayList<State> states = mdp.getStates();
 		ArrayList<Action> actions = mdp.getActions();
-
+		int k = 0;
 		do {
 			plan = loopingPlan;// update plan with last info
 			delta = 0;
-			p.printQ(plan);
+			// p.printQ(plan);
 
-			for (int i = 0; i < qSize-1; i++) {
+			for (int i = 0; i < qSize - 1; i++) {
 				Q currentUtil = loopingPlan.get(i);
 				Q currentPlanUtil = plan.get(i);
 
 				double nextMove;
 
-					nextMove = maxAction(actions, currentUtil, plan.get(i + 1));
+				nextMove = maxAction(actions, currentUtil);
 
 				nextMove = reward(currentUtil.getState()) + (gamma * nextMove);
 
@@ -48,26 +48,40 @@ public class Value_Iteration extends Learner {
 					p.println("Reached here");
 					delta = Math.abs(currentUtil.getUtility() - currentPlanUtil.getUtility());
 				}
-				p.println(currentUtil.getUtility() - currentPlanUtil.getUtility() + "");
-				//p.pause();
+				// p.println(currentUtil.getUtility() - currentPlanUtil.getUtility() + "");
+				// p.pause();
 			}
-
-		} while (delta < error * (1 - gamma) * gamma);
+			k++;
+		} while (k < 5);// (delta < error * (1 - gamma) * gamma);
 		return plan;
 	}
 
-	public double maxAction(ArrayList<Action> actions, Q thisQVal, Q nextQVal) {
+	public double maxAction(ArrayList<Action> actions, Q thisQVal) {
 		double thisUtility = thisQVal.getUtility();
-		double nextUtility = nextQVal.getUtility();
+		// double nextUtility = nextQVal.getUtility();
 		double maxValue = Double.MIN_VALUE;
 		for (int i = 0; i < thisQVal.getActions().size(); i++) {
-			double check = (transitionProb * nextUtility) + ((1 - transitionProb) * thisUtility);
+			double check = applyAction(thisQVal.getActions().get(i), thisQVal.getState());
+			// Problem is here. ^ the equation is P(s'|s,a).. I'm just checking the exact same summation.
+			// I need to deal with the next state as a local var here!!!
+			p.println(check + "");
 			if (check > maxValue) {
 				maxValue = check;
 				thisQVal.setBestActionIndex(i);	// sets the action according to the for loop's i
+				p.printAction(thisQVal.getActions().get(i));
+				p.println("Set new best action  " + i);
 			}
 		}
+		p.println("");
 		return maxValue;
+	}
+	
+	public double applyAction(Action action, State state){
+		double value = -1;
+		//here I need to apply the action to the state, and then find the nextState from my ArrayList<Q>. 
+		//Then, apply the transition logic.
+		
+		return value;
 	}
 
 	public ArrayList<Q> getQ() {

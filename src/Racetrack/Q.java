@@ -6,7 +6,7 @@ public class Q {
 	private State state;
 	private ArrayList<Action> actions;
 	private double utility = 0;
-	private int bestActionIndex;
+	private int bestActionIndex = -1;
 
 	public Q(State state, ArrayList<Action> actions) {
 		this.state = state;

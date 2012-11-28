@@ -66,6 +66,8 @@ public class Printer {
 			printState(qValues.get(i).getState());
 			println("Actions: ");
 			printActions(qValues.get(i).getActions());
+			print("Best Action so far: ");
+			println(qValues.get(i).getBestActionIndex() + "");
 			print("Value: ");
 			println(qValues.get(i).getUtility() + "\n");
 		}
