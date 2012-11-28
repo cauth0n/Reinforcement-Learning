@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Simulator {
 	private final int lowAcc = -1;
 	private final int highAcc = 1;
-	private final double gamma = .8;
+	private final double gamma = .9;
 	private final double error = .5;
 
 	private Printer p;
@@ -29,7 +29,7 @@ public class Simulator {
 		startFinishInit();
 		// racerMove();
 		constructMDP();
-		 learn();// !
+		learn();// !
 	}
 
 	public void startFinishInit() {
@@ -50,8 +50,6 @@ public class Simulator {
 			p.println("No start or finish state found.");
 		}
 
-		// currentState.setRacerPosition(racerStart);
-		// racer = new Racer(racerStart);
 	}
 
 	public void constructMDP() {
@@ -75,18 +73,17 @@ public class Simulator {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
 				char tile = currentState.getTile(i, j);
-				if (tile == '.' || tile == 'S' || tile == 'F') {
+				//if (tile == '.' || tile == 'S' || tile == 'F') {
 					State temp = new State(new XYPair(i, j), new XYPair(0, 0));
 					allStates.add(temp);
-				}
+				//}
 			}
 		}
-		p.printStates(allStates);
 		return allStates;
 	}
 
 	public void learn() {
-		learner = new Value_Iteration(mdp, error, gamma);
+		learner = new Value_Iteration(mdp, error, gamma, racerlessBoard);
 	}
 
 }

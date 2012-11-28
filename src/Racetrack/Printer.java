@@ -1,6 +1,8 @@
 package Racetrack;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class Printer {
 
@@ -48,7 +50,7 @@ public class Printer {
 
 	public void printActions(ArrayList<Action> actions) {
 		for (int i = 0; i < actions.size(); i++) {
-			print(i + ": ");
+			print(" " + i + ": ");
 			printAction(actions.get(i));
 		}
 	}
@@ -62,10 +64,24 @@ public class Printer {
 		for (int i = 0; i < qValues.size(); i++){
 			print("State: ");
 			printState(qValues.get(i).getState());
-			print("Action: ");
-			printAction(qValues.get(i).getAction());
+			println("Actions: ");
+			printActions(qValues.get(i).getActions());
 			print("Value: ");
 			println(qValues.get(i).getUtility() + "\n");
 		}
 	}
+	
+	public void pause(){
+		try{
+		Scanner in = new Scanner(System.in);
+		println("paused. 1 to continue.");
+		int value = 0;
+		while (value != 1){
+			value = in.nextInt();
+		}
+		}catch(InputMismatchException e){
+			println("Wrong input -- continuing");
+		}
+	}
+	
 }

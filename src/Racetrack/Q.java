@@ -1,20 +1,20 @@
 package Racetrack;
 
+import java.util.ArrayList;
+
 public class Q {
 	private State state;
-	private Action action;
+	private ArrayList<Action> actions;
 	private double utility = 0;
+	private int bestActionIndex;
 
-//	public Q(State state, Action action) {
-//		this.state = state;
-//		this.action = action;
-//	}
-	public Q(State state){
+	public Q(State state, ArrayList<Action> actions) {
 		this.state = state;
-		action = null;
+		this.actions = actions;
 	}
-	public void setAction(Action a){
-		action = a;
+
+	public void addAction(Action a) {
+		actions.add(a);
 	}
 
 	public double getUtility() {
@@ -28,9 +28,16 @@ public class Q {
 	public State getState() {
 		return state;
 	}
+	
+	public int getBestActionIndex(){
+		return bestActionIndex;
+	}
+	public void setBestActionIndex(int updatedActionIndex){
+		bestActionIndex = updatedActionIndex;
+	}
 
-	public Action getAction() {
-		return action;
+	public ArrayList<Action> getActions() {
+		return actions;
 	}
 
 }
