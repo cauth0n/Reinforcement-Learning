@@ -5,8 +5,7 @@ import java.util.ArrayList;
 public class Q {
 	private State state;
 	private ArrayList<Action> actions;
-	private double utility = 0;
-	private int bestActionIndex = -1;
+	private int bestActionIndex = -1;	//used to return argmax over actions
 
 	public Q(State state, ArrayList<Action> actions) {
 		this.state = state;
@@ -15,14 +14,6 @@ public class Q {
 
 	public void addAction(Action a) {
 		actions.add(a);
-	}
-
-	public double getUtility() {
-		return utility;
-	}
-
-	public void setUtility(double utility) {
-		this.utility = utility;
 	}
 
 	public State getState() {

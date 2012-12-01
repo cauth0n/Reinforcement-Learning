@@ -3,39 +3,36 @@ package Racetrack;
 public class Racer {
 
 	/**
-	 * instance variables -- note that acceleration is not on here; that is
-	 * because acceleration determines velocity, and is only used to do so at
-	 * the accelerate() method.
+	 * instance variables -- note that acceleration is not on here; that is because acceleration determines velocity,
+	 * and is only used to do so at the accelerate() method.
 	 */
 	private XYPair position;
 	private XYPair velocity;
 
-	public Racer(XYPair positions) {
+	public Racer(XYPair position) {
 		this.position = position;
 		velocity = new XYPair(0, 0);
 	}
 
-	public int getXPos() {
-		return position.getX();
+	public XYPair getPos() {
+		return position;
 	}
 
-	public int getYPos() {
-		return position.getY();
+	public XYPair getVel() {
+		return velocity;
 	}
 
-	public int getXVel() {
-		return velocity.getX();
+	public void setVel(XYPair vel) {
+		velocity = vel;
 	}
 
-	public int getYVel() {
-		return velocity.getY();
+	public void setPos(XYPair pos) {
+		position = pos;
 	}
 
 	public void accelerate(XYPair acceleration) {
-		velocity.setX(getXVel() + acceleration.getX());
-		velocity.setY(getYVel() + acceleration.getY());
-		position.setX(getXPos() + getXVel());
-		position.setY(getYPos() + getYVel());
+		setVel(new XYPair(velocity.getX() + acceleration.getX(), velocity.getY() + acceleration.getY()));
+		setPos(new XYPair(position.getX() + velocity.getX(), position.getY() + velocity.getY()));
 	}
 
 	public void reset() {

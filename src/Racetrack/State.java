@@ -2,9 +2,9 @@ package Racetrack;
 
 public class State {
 
-	private double utility;
 	private XYPair position;
 	private XYPair velocity;
+	private double utility = 0;
 
 	public State(XYPair position, XYPair velocity) {
 		this.position = position;
@@ -15,22 +15,6 @@ public class State {
 		this(another.getPosition(), another.getVelocity());
 	}
 
-	public double getUtility() {
-		return utility;
-	}
-
-	public void setUtility(double in) {
-		utility = in;
-	}
-
-	public void resetPosition(XYPair newPosition) {
-		this.position = newPosition;
-	}
-
-	public void restVelocity() {
-		this.velocity = new XYPair(0, 0);
-	}
-
 	public XYPair getPosition() {
 		return position;
 	}
@@ -38,20 +22,11 @@ public class State {
 	public XYPair getVelocity() {
 		return velocity;
 	}
-
-	public int getXPosition() {
-		return position.getX();
+	public double getUtility() {
+		return utility;
 	}
 
-	public int getYPosition() {
-		return position.getY();
-	}
-
-	public int getXVelocity() {
-		return velocity.getX();
-	}
-
-	public int getYVelocity() {
-		return velocity.getY();
+	public void setUtility(double utility) {
+		this.utility = utility;
 	}
 }

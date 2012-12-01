@@ -1,10 +1,13 @@
 package Racetrack;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Simulator {
 	private final int lowAcc = -1;
 	private final int highAcc = 1;
+	private final int lowVelCap = -5;
+	private final int highVelCap = 5;
 	private final double gamma = .9;
 	private final double error = .5;
 
@@ -26,10 +29,27 @@ public class Simulator {
 		cols = racerLessBoard.getHeight();
 		currentState = new Race_Track(racerLessBoard);
 		p.printTrack(racerLessBoard);
+		init();
+	}
+
+	public void init() {
 		startFinishInit();
-		// racerMove();
+		XYPair start = pickStart();
+		racer = new Racer(start);
+		putRacer();
 		constructMDP();
-		learn();// !
+		learn();
+	}
+	
+	public void putRacer(){
+		currentState.setRacerPosition(racer.getPos());
+		p.println("Racer moved.");
+		p.printTrack(currentState);
+	}
+
+	public XYPair pickStart() {
+		Random rand = new Random();
+		return start.get(rand.nextInt(start.size()));
 	}
 
 	public void startFinishInit() {
@@ -49,7 +69,6 @@ public class Simulator {
 		if (start.isEmpty() || finish.isEmpty()) {
 			p.println("No start or finish state found.");
 		}
-
 	}
 
 	public void constructMDP() {
@@ -72,11 +91,12 @@ public class Simulator {
 		ArrayList<State> allStates = new ArrayList<State>();
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				char tile = currentState.getTile(i, j);
-				//if (tile == '.' || tile == 'S' || tile == 'F') {
-					State temp = new State(new XYPair(i, j), new XYPair(0, 0));
-					allStates.add(temp);
-				//}
+				for (int k = lowVelCap; k <= highVelCap; k++) {
+					for (int l = lowVelCap; l < highVelCap; l++) {
+						State temp = new State(new XYPair(i, j), new XYPair(k, l));
+						allStates.add(temp);
+					}
+				}
 			}
 		}
 		return allStates;

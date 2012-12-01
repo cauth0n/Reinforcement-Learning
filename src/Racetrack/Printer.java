@@ -27,10 +27,10 @@ public class Printer {
 	}
 
 	public void printState(State state) {
-		println("Racer Position: (" + state.getXPosition() + ", "
-				+ state.getYPosition() + ")");
-		println("Racer Velocity: (" + state.getXVelocity() + ", "
-				+ state.getYVelocity() + ")");
+		println("Racer Position: (" + state.getPosition().getX() + ", "
+				+ state.getPosition().getY() + ")");
+		println("Racer Velocity: (" + state.getVelocity().getX() + ", "
+				+ state.getVelocity().getY() + ")");
 	}
 
 	public void printStates(ArrayList<State> states) {
@@ -69,7 +69,7 @@ public class Printer {
 			print("Best Action so far: ");
 			println(qValues.get(i).getBestActionIndex() + "");
 			print("Value: ");
-			println(qValues.get(i).getUtility() + "\n");
+			println(qValues.get(i).getState().getUtility() + "\n");
 		}
 	}
 	

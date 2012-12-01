@@ -24,9 +24,6 @@ public class Value_Iteration extends Learner {
 		ArrayList<Q> loopingPlan = new ArrayList<Q>(qSize);
 		plan = getQ();// all zero utilities.
 		loopingPlan = plan;
-		ArrayList<State> states = mdp.getStates();
-		ArrayList<Action> actions = mdp.getActions();
-		int k = 0;
 		do {
 			plan = loopingPlan;// update plan with last info
 			delta = 0;
@@ -38,32 +35,32 @@ public class Value_Iteration extends Learner {
 
 				double nextMove;
 
-				nextMove = maxAction(actions, currentUtil);
+				nextMove = maxAction(currentUtil);
 
-				nextMove = reward(currentUtil.getState()) + (gamma * nextMove);
+				double bestUtilAtThisState = reward(currentUtil.getState()) + (gamma * nextMove);
 
-				currentUtil.setUtility(nextMove);
+				currentUtil.getState().setUtility(bestUtilAtThisState);
 
-				if (Math.abs(currentUtil.getUtility() - currentPlanUtil.getUtility()) > delta) {
-					p.println("Reached here");
-					delta = Math.abs(currentUtil.getUtility() - currentPlanUtil.getUtility());
+				if (Math.abs(currentUtil.getState().getUtility() - currentPlanUtil.getState().getUtility()) > delta) {
+					delta = Math.abs(currentUtil.getState().getUtility() - currentPlanUtil.getState().getUtility());
 				}
-				// p.println(currentUtil.getUtility() - currentPlanUtil.getUtility() + "");
+				p.println(currentUtil.getState().getUtility() - currentPlanUtil.getState().getUtility() + "");
 				// p.pause();
 			}
-			k++;
-		} while (k < 5);// (delta < error * (1 - gamma) * gamma);
+		} while (delta < error * (1 - gamma) * gamma);
+		p.println("Plan generated!!!!");
 		return plan;
 	}
 
-	public double maxAction(ArrayList<Action> actions, Q thisQVal) {
-		double thisUtility = thisQVal.getUtility();
-		// double nextUtility = nextQVal.getUtility();
+	public double maxAction(Q thisQVal) {
 		double maxValue = Double.MIN_VALUE;
+
 		for (int i = 0; i < thisQVal.getActions().size(); i++) {
-			double check = applyAction(thisQVal.getActions().get(i), thisQVal.getState());
+			double check = getUtilitiesAfterAction(thisQVal.getActions().get(i), thisQVal);
+
 			// Problem is here. ^ the equation is P(s'|s,a).. I'm just checking the exact same summation.
 			// I need to deal with the next state as a local var here!!!
+
 			p.println(check + "");
 			if (check > maxValue) {
 				maxValue = check;
@@ -75,13 +72,64 @@ public class Value_Iteration extends Learner {
 		p.println("");
 		return maxValue;
 	}
-	
-	public double applyAction(Action action, State state){
+
+	public double getUtilitiesAfterAction(Action action, Q thisQ) {
 		double value = -1;
-		//here I need to apply the action to the state, and then find the nextState from my ArrayList<Q>. 
-		//Then, apply the transition logic.
-		
+		int i = 0;
+
+		State failedState = getStateAFterFailedAction(thisQ.getState(), action);
+		while (i < stateSize) {
+			if (isSameState(failedState, mdp.getStates().get(i))) {
+				break;
+			}
+		}
+		double failedAcc = (1 - transitionProb) * mdp.getStates().get(i).getUtility();
+		State workingState = getStateAfterAction(thisQ.getState(), action);
+		i = 0;
+		while (i < stateSize) {
+			if (isSameState(workingState, mdp.getStates().get(i))) {
+				break;
+			}
+		}
+		double workingAcc = transitionProb * mdp.getStates().get(i).getUtility();
+
+		value = workingAcc + failedAcc;
+
 		return value;
+	}
+
+	public boolean isSameState(State one, State two) {
+		boolean toRet = false;
+		if ((one.getPosition().getX() == two.getPosition().getX())
+				&& one.getPosition().getY() == two.getPosition().getY()) {	// same position
+			if ((one.getVelocity().getX() == two.getVelocity().getX())
+					&& (one.getVelocity().getY() == two.getVelocity().getY())) {	// same velocity
+				toRet = true;
+			}
+		}
+		return toRet;
+	}
+
+	public State getStateAFterFailedAction(State state, Action action) {
+		int newXPos = state.getPosition().getX() + state.getVelocity().getX();
+		int newYPos = state.getPosition().getY() + state.getVelocity().getX();
+
+		XYPair position = new XYPair(newXPos, newYPos);
+		State newState = new State(position, state.getVelocity());
+		return newState;
+	}
+
+	public State getStateAfterAction(State state, Action action) {
+
+		int newXVel = state.getVelocity().getX() + action.getXAcc();
+		int newYVel = state.getVelocity().getY() + action.getYAcc();
+		int newXPos = state.getPosition().getX() + newXVel;
+		int newYPos = state.getPosition().getY() + newYVel;
+
+		XYPair velocity = new XYPair(newXVel, newYVel);
+		XYPair position = new XYPair(newXPos, newYPos);
+		State newState = new State(position, velocity);
+		return newState;
 	}
 
 	public ArrayList<Q> getQ() {
@@ -90,10 +138,6 @@ public class Value_Iteration extends Learner {
 			getQValues.add(new Q(mdp.getStates().get(i), mdp.getActions()));
 		}
 		return getQValues;
-	}
-
-	public void printScores() {
-
 	}
 
 }
