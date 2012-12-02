@@ -1,19 +1,19 @@
 package Racetrack;
 
-public class Race_Track {
+public class RaceTrack {
 
 	private final char racer = 'R';
 	private Tile[][] tilesInState;
 	private int widthOfState;
 	private int heightOfState;
 
-	public Race_Track(int xLength, int yLength) {
+	public RaceTrack(int xLength, int yLength) {
 		tilesInState = new Tile[xLength][yLength];
 		widthOfState = xLength;
 		heightOfState = yLength;
 	}
 
-	public Race_Track(Race_Track another) {
+	public RaceTrack(RaceTrack another) {
 		this(another.getWidth(), another.getHeight());
 		for (int i = 0; i < widthOfState; i++) {
 			for (int j = 0; j < heightOfState; j++) {

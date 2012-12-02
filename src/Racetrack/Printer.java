@@ -26,20 +26,24 @@ public class Printer {
 		System.out.println(c);
 	}
 
-	public void printState(State state) {
-		println("Racer Position: (" + state.getPosition().getX() + ", "
-				+ state.getPosition().getY() + ")");
-		println("Racer Velocity: (" + state.getVelocity().getX() + ", "
-				+ state.getVelocity().getY() + ")");
+	public void printState(RideableState state) {
+		println("Racer Position: (" + state.getPosition().getX() + ", " + state.getPosition().getY() + ")");
+		println("Racer Velocity: (" + state.getVelocity().getX() + ", " + state.getVelocity().getY() + ")");
+		println("Racer's actions: ");
+		printActions(state.getActions());
+		// pause();
 	}
 
-	public void printStates(ArrayList<State> states) {
-		for (State state : states) {
+	public void printStates(ArrayList<RideableState> states) {
+		int i = 0;
+		for (RideableState state : states) {
+			println("Action " + i);
 			printState(state);
+			i++;
 		}
 	}
 
-	public void printTrack(Race_Track raceTrack) {
+	public void printTrack(RaceTrack raceTrack) {
 		for (int i = 0; i < raceTrack.getWidth(); i++) {
 			for (int j = 0; j < raceTrack.getHeight(); j++) {
 				System.out.print(raceTrack.getTile(i, j) + "");
@@ -58,32 +62,36 @@ public class Printer {
 	public void printAction(Action action) {
 		println("(" + action.getXAcc() + ", " + action.getYAcc() + ")");
 	}
+	
+	public void printQ(Q qValues){
+		print("State: ");
+		printState(qValues.getState());
+		println("Actions: ");
+		printAction(qValues.getState().getAction(qValues.getBestActionIndex()));
+		print("Best Action so far: ");
+		println(qValues.getBestActionIndex() + "");
+		print("Value: ");
+		println(qValues.getState().getUtility() + "\n");
+	}
 
-	public void printQ(ArrayList<Q> qValues){
+	public void printQs(ArrayList<Q> qValues) {
 		println("Printing Q value pairs");
-		for (int i = 0; i < qValues.size(); i++){
-			print("State: ");
-			printState(qValues.get(i).getState());
-			println("Actions: ");
-			printActions(qValues.get(i).getActions());
-			print("Best Action so far: ");
-			println(qValues.get(i).getBestActionIndex() + "");
-			print("Value: ");
-			println(qValues.get(i).getState().getUtility() + "\n");
+		for (Q qValue : qValues){
+			printQ(qValue);
 		}
 	}
-	
-	public void pause(){
-		try{
-		Scanner in = new Scanner(System.in);
-		println("paused. 1 to continue.");
-		int value = 0;
-		while (value != 1){
-			value = in.nextInt();
-		}
-		}catch(InputMismatchException e){
+
+	public void pause() {
+		try {
+			Scanner in = new Scanner(System.in);
+			println("paused. 1 to continue.");
+			int value = 0;
+			while (value != 1) {
+				value = in.nextInt();
+			}
+		} catch (InputMismatchException e) {
 			println("Wrong input -- continuing");
 		}
 	}
-	
+
 }

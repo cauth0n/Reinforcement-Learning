@@ -3,8 +3,8 @@ package Racetrack;
 public class XYPair {
 	private int x;
 	private int y;
-	
-	public XYPair(int x, int y){
+
+	public XYPair(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -24,6 +24,5 @@ public class XYPair {
 	public void setY(int y) {
 		this.y = y;
 	}
-	
 
 }

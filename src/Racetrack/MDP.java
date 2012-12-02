@@ -3,24 +3,20 @@ package Racetrack;
 import java.util.ArrayList;
 
 public class MDP {
-	private ArrayList<State> states;
-	private ArrayList<Action> actions;
+	private ArrayList<RideableState> states;
+
 	private final double transitionProb = .8;
 
-	public MDP(ArrayList<State> state, ArrayList<Action> actions) {
+	public MDP(ArrayList<RideableState> state) {
 		this.states = state;
-		this.actions = actions;
-	}
 
-	public ArrayList<Action> getActions() {
-		return actions;
 	}
 
 	public double getTransitionProb() {
 		return transitionProb;
 	}
 
-	public ArrayList<State> getStates() {
+	public ArrayList<RideableState> getStates() {
 		return states;
 	}
 

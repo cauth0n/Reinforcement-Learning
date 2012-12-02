@@ -10,7 +10,7 @@ public class Main {
 	private final String oTrack = "O-track.txt";
 	private final String rTrack = "R-track.txt";
 	private final String practiceTrack = "Practice-Track.txt";
-	private Race_Track racerLessBoard;
+	private RaceTrack racerLessBoard;
 
 	public Main(String directory) {
 
@@ -22,7 +22,7 @@ public class Main {
 			String[] size = fileIn.nextLine().split(",");
 			int rows = Integer.parseInt(size[0]);
 			int cols = Integer.parseInt(size[1]);
-			racerLessBoard = new Race_Track(rows, cols);
+			racerLessBoard = new RaceTrack(rows, cols);
 			for (int i = 0; i < rows; i++) {
 				String line = fileIn.nextLine();
 				for (int j = 0; j < cols; j++) {
@@ -37,6 +37,9 @@ public class Main {
 			e.printStackTrace();
 		}
 		new Simulator(racerLessBoard);
+	}
+	public RaceTrack getTrack(){
+		return racerLessBoard;
 	}
 
 	public void println(String line) {
