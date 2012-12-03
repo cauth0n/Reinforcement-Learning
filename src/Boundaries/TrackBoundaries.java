@@ -4,13 +4,27 @@ import Racetrack.RaceTrack;
 import Racetrack.RideableState;
 import Racetrack.XYPair;
 
+/**
+ * Track boundaries class -- implements Boundaries for the race track problem.
+ * 
+ * @author derek.reimanis
+ * 
+ */
 public abstract class TrackBoundaries implements Boundaries {
 	protected RaceTrack trackTemplate;
 
+	/**
+	 * Constructor -- holds the race track specific to this implementation.
+	 * 
+	 * @param raceTrack
+	 */
 	public TrackBoundaries(RaceTrack raceTrack) {
 		this.trackTemplate = raceTrack;
 	}
 
+	/* (non-Javadoc)
+	 * @see Boundaries.Boundaries#failedTransisiton(Racetrack.XYPair, Racetrack.XYPair)
+	 */
 	public RideableState failedTransisiton(XYPair pos, XYPair vel) {
 		XYPair position;
 		XYPair velocity;
@@ -30,7 +44,9 @@ public abstract class TrackBoundaries implements Boundaries {
 			}
 		} else {// x didn't work
 			if (smoothYPath(yOld, newYPos, xOld)) {// y works, x doesn't.
-				if (smoothXPath(xOld, newXPos, newYPos)) {// special case, y works and THEN x works.
+				if (smoothXPath(xOld, newXPos, newYPos)) {// special case, y
+															// works and THEN x
+															// works.
 					position = new XYPair(newXPos, newYPos);
 					velocity = new XYPair(vel.getX(), vel.getY());
 				} else {
@@ -50,10 +66,16 @@ public abstract class TrackBoundaries implements Boundaries {
 		return newState;
 	}
 
+	/* (non-Javadoc)
+	 * @see Boundaries.Boundaries#failedTransition(Racetrack.RideableState)
+	 */
 	public RideableState failedTransition(RideableState state) {
 		return failedTransisiton(state.getPosition(), state.getVelocity());
 	}
 
+	/* (non-Javadoc)
+	 * @see Boundaries.Boundaries#transition(Racetrack.XYPair, Racetrack.XYPair, Racetrack.XYPair)
+	 */
 	public RideableState transition(XYPair pos, XYPair vel, XYPair accel) {
 		XYPair position;
 		XYPair velocity;
@@ -77,7 +99,9 @@ public abstract class TrackBoundaries implements Boundaries {
 			}
 		} else {// x didn't work
 			if (smoothYPath(yOld, newYPos, xOld)) {// y works, x doesn't.
-				if (smoothXPath(xOld, newXPos, newYPos)) {// special case, y works and THEN x works.
+				if (smoothXPath(xOld, newXPos, newYPos)) {// special case, y
+															// works and THEN x
+															// works.
 					position = new XYPair(newXPos, newYPos);
 					velocity = new XYPair(newXVel, newYVel);
 				} else {
@@ -96,11 +120,18 @@ public abstract class TrackBoundaries implements Boundaries {
 		return newState;
 	}
 
+	/* (non-Javadoc)
+	 * @see Boundaries.Boundaries#transition(Racetrack.RideableState, int)
+	 */
 	public RideableState transition(RideableState state, int actionIndex) {
 
-		return transition(state.getPosition(), state.getVelocity(), state.getAction(actionIndex).getAcceleration());
+		return transition(state.getPosition(), state.getVelocity(), state
+				.getAction(actionIndex).getAcceleration());
 	}
 
+	/* (non-Javadoc)
+	 * @see Boundaries.Boundaries#findYDifference(int, int, int)
+	 */
 	public int findYDifference(int yOld, int yNew, int x) {
 		int stop = -1;
 
@@ -122,6 +153,9 @@ public abstract class TrackBoundaries implements Boundaries {
 		return stop;
 	}
 
+	/* (non-Javadoc)
+	 * @see Boundaries.Boundaries#findXDifference(int, int, int)
+	 */
 	public int findXDifference(int xOld, int xNew, int y) {
 		int stop = -1;
 
@@ -143,6 +177,9 @@ public abstract class TrackBoundaries implements Boundaries {
 		return stop;
 	}
 
+	/* (non-Javadoc)
+	 * @see Boundaries.Boundaries#smoothYPath(int, int, int)
+	 */
 	public boolean smoothYPath(int yOld, int yNew, int x) {
 		boolean check = true;
 		try {
@@ -164,6 +201,9 @@ public abstract class TrackBoundaries implements Boundaries {
 		return check;
 	}
 
+	/* (non-Javadoc)
+	 * @see Boundaries.Boundaries#smoothXPath(int, int, int)
+	 */
 	public boolean smoothXPath(int xOld, int xNew, int yOld) {
 		boolean check = true;
 		try {

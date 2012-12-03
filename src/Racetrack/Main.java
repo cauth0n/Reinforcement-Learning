@@ -4,6 +4,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ * Program to read in a file in form :
+ * <x,y>
+ * where x is the number of rows in the file, y is the cols
+ * 
+ * This file is represented as a racetrack, and a racer car 
+ * must apply accelerations to alter its position and velocity 
+ * to make it to the finish line. 
+ * 
+ * @author derek.reimanis
+ *
+ */
 public class Main {
 
 	private final String lTrack = "L-track.txt";
@@ -12,9 +24,14 @@ public class Main {
 	private final String practiceTrack = "Practice-Track.txt";
 	private RaceTrack racerLessBoard;
 
-	public Main(String directory) {
+	/**
+	 * Constructor -- reads in file, creates race track, and starts the 
+	 * simulator on that track.
+	 * 
+	 */
+	public Main() {
 
-		String filePath = directory += practiceTrack;
+		String filePath = practiceTrack;
 
 		try {
 			File file = new File(filePath);
@@ -30,31 +47,32 @@ public class Main {
 				}
 			}
 		} catch (FileNotFoundException e) {
-			println("File not found.");
+			System.out.println("File not found.");
 			e.printStackTrace();
 		} catch (NullPointerException e) {
-			println("Read in values incorrectly -- debug line 30 from Main");
+			System.out.println("Read in values incorrectly -- debug line 30 from Main");
 			e.printStackTrace();
 		}
 		new Simulator(racerLessBoard, filePath);
 	}
+	
+	/**
+	 * Returns the raceTrack with no racer on it.
+	 * 
+	 * @return track with no racer
+	 */
 	public RaceTrack getTrack(){
 		return racerLessBoard;
 	}
 
-	public void println(String line) {
-		System.out.println(line);
-	}
-
-	public void print(String line) {
-		System.out.print(line);
-	}
 
 	/**
-	 * @param args
+	 * public static void main,
+	 * initializes Main() constructor.
+	 * @param argss
 	 */
 	public static void main(String[] args) {
-		new Main("");
+		new Main();
 
 	}
 
