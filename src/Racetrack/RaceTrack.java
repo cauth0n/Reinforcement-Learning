@@ -7,39 +7,35 @@ public class RaceTrack {
 	private int widthOfState;
 	private int heightOfState;
 
-	public RaceTrack(int xLength, int yLength) {
-		tilesInState = new Tile[xLength][yLength];
-		widthOfState = xLength;
-		heightOfState = yLength;
+	public RaceTrack(int rows, int cols) {
+		tilesInState = new Tile[rows][cols];
+		widthOfState = cols;
+		heightOfState = rows;
 	}
 
 	public RaceTrack(RaceTrack another) {
-		this(another.getWidth(), another.getHeight());
-		for (int i = 0; i < widthOfState; i++) {
-			for (int j = 0; j < heightOfState; j++) {
+		this(another.getHeight(), another.getWidth());
+		for (int i = 0; i < heightOfState; i++) {
+			for (int j = 0; j < widthOfState; j++) {
 				this.makeTile(i, j, another.getTile(i, j));
 			}
 		}
 	}
 
 	public void setRacerPosition(XYPair pos) {
-		tilesInState[pos.getX()][pos.getY()].setTileValue(racer);
-	}
-
-	public XYPair getRacerPosition() {
-		for (int i = 0; i < widthOfState; i++) {
-			for (int j = 0; j < heightOfState; j++) {
-				if (tilesInState[i][j].getTileValue() == racer) {
-					return new XYPair(i, j);
-				}
-			}
-		}
-		System.out.println("Didn't find a racer.");
-		return null;
+		tilesInState[pos.getY()][pos.getX()].setTileValue(racer);
 	}
 
 	public char getTile(int xLoc, int yLoc) {
 		return tilesInState[xLoc][yLoc].getTileValue();
+	}
+
+	public char getTile(XYPair pos) {
+		return tilesInState[pos.getY()][pos.getX()].getTileValue();
+	}
+
+	public void setTile(XYPair pos, char value) {
+		tilesInState[pos.getY()][pos.getX()].setTileValue(value);
 	}
 
 	public void setTile(int xLoc, int yLoc, char value) {

@@ -108,14 +108,14 @@ public abstract class TrackBoundaries implements Boundaries {
 
 		while (stop == -1) {
 			if (yNew > yOld) {
-				if (trackTemplate.getTile(x, yOld) == '#') {
-					stop = yOld - 1;
+				if (trackTemplate.getTile(yOld + 1, x) == '#') {
+					stop = yOld;
 					break;
 				}
 				yOld++;
 			} else {
-				if (trackTemplate.getTile(x, yOld) == '#') {
-					stop = yOld + 1;
+				if (trackTemplate.getTile(yOld - 1, x) == '#') {
+					stop = yOld;
 					break;
 				}
 				yOld--;
@@ -129,14 +129,14 @@ public abstract class TrackBoundaries implements Boundaries {
 
 		while (stop == -1) {
 			if (xNew > xOld) {
-				if (trackTemplate.getTile(xOld, y) == '#') {
-					stop = xOld - 1;
+				if (trackTemplate.getTile(y, xOld + 1) == '#') {
+					stop = xOld;
 					break;
 				}
 				xOld++;
 			} else {
-				if (trackTemplate.getTile(xOld, y) == '#') {
-					stop = xOld + 1;
+				if (trackTemplate.getTile(y, xOld - 1) == '#') {
+					stop = xOld;
 					break;
 				}
 				xOld--;
@@ -145,17 +145,17 @@ public abstract class TrackBoundaries implements Boundaries {
 		return stop;
 	}
 
-	public boolean smoothYPath(int yOld, int yNew, int xOld) {
+	public boolean smoothYPath(int yOld, int yNew, int x) {
 		boolean check = true;
 		try {
 			while (yNew != yOld || !check) {
-				//p.println(" yNew + yOld " + yOld + " " + yNew + " " + xOld);
+				// p.println(" yNew + yOld " + yOld + " " + yNew + " " + xOld);
 				if (yNew > yOld) {
 					yOld++;
 				} else {
 					yOld--;
 				}
-				if (trackTemplate.getTile(xOld, yOld) == '#') {
+				if (trackTemplate.getTile(yOld, x) == '#') {
 					check = false;
 					break;
 				}
@@ -170,13 +170,13 @@ public abstract class TrackBoundaries implements Boundaries {
 		boolean check = true;
 		try {
 			while (xNew != xOld || !check) {
-				//p.println(" xNew + xOld " + xOld + " " + xNew + " " + yOld);
+				// p.println(" xNew + xOld " + xOld + " " + xNew + " " + yOld);
 				if (xNew > xOld) {
 					xOld++;
 				} else {
 					xOld--;
 				}
-				if (trackTemplate.getTile(xOld, yOld) == '#') {
+				if (trackTemplate.getTile(yOld, xOld) == '#') {
 					check = false;
 					break;
 				}

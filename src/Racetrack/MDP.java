@@ -9,7 +9,6 @@ public class MDP {
 
 	public MDP(ArrayList<RideableState> state) {
 		this.states = state;
-
 	}
 
 	public double getTransitionProb() {

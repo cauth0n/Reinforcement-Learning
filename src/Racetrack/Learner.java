@@ -29,7 +29,7 @@ public abstract class Learner {
 
 	public double reward(RideableState state) {
 		double value = -1;
-		if (raceTrack.getTile(state.getPosition().getX(), state.getPosition().getY()) == 'F') {
+		if (raceTrack.getTile(state.getPosition()) == 'F') {
 			value = 1;
 		}
 

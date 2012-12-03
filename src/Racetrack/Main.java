@@ -23,9 +23,9 @@ public class Main {
 			int rows = Integer.parseInt(size[0]);
 			int cols = Integer.parseInt(size[1]);
 			racerLessBoard = new RaceTrack(rows, cols);
-			for (int i = 0; i < rows; i++) {
+			for (int i = 0; i < rows; i++) {		//y
 				String line = fileIn.nextLine();
-				for (int j = 0; j < cols; j++) {
+				for (int j = 0; j < cols; j++) {		//x
 					racerLessBoard.makeTile(i, j, line.charAt(j));
 				}
 			}

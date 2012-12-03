@@ -48,8 +48,8 @@ public class Printer {
 	}
 
 	public void printTrack(RaceTrack raceTrack) {
-		for (int i = 0; i < raceTrack.getWidth(); i++) {
-			for (int j = 0; j < raceTrack.getHeight(); j++) {
+		for (int i = 0; i < raceTrack.getHeight(); i++) {
+			for (int j = 0; j < raceTrack.getWidth(); j++) {
 				System.out.print(raceTrack.getTile(i, j) + "");
 			}
 			System.out.println("");

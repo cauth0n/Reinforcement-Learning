@@ -42,32 +42,33 @@ public class Racer {
 		Random rand = new Random();
 		int randVal = rand.nextInt(10);
 		if (randVal < 2) {
-			p.println("Racer failed, before set: " + position.getX() + " " + position.getY());
+
 			RideableState temp = boundaryLogic.failedTransisiton(position, velocity);
 
 			// racer does not accelerate.
 			setPos(new XYPair(temp.getPosition().getX(), temp.getPosition().getY()));
-			p.println("Racer failed, after set: " + position.getX() + " " + position.getY());
 
 			if (temp.getVelocity().getX() == 0 && temp.getVelocity().getY() == 0) {
 				reset();// hit a wall.
 
 			}
-		} else {// racer accelerates
-			p.println("Racer success, before set: " + position.getX() + " " + position.getY());
-			RideableState temp = boundaryLogic.transition(position, velocity, acceleration);
-			p.println("Racer success, position after set: " + temp.getPosition().getX() + " " + temp.getPosition().getY());
-			p.println("Racer success, velocity after set: " + temp.getVelocity().getX() + " " + temp.getVelocity().getY());
-			p.println("Racer success, acceleration after set: " + acceleration.getX() + " " + acceleration.getY());
+			p.println("Racer failed to accelerate. Velocity is now: (" + velocity.getX() + ", " + velocity.getY()
+					+ ")");
+			p.println("							   Position moves to: (" + position.getX() + ", " + position.getY() + ")");
 			
+		} else {// racer accelerates
+
+			RideableState temp = boundaryLogic.transition(position, velocity, acceleration);
+
 			setPos(new XYPair(temp.getPosition().getX(), temp.getPosition().getY()));
-			//p.println("Racer success, after set: " + position.getX() + " " + position.getY());
 			if (temp.getVelocity().getX() == 0 && temp.getVelocity().getY() == 0) {
 				reset();
 			} else {
-				setVel(new XYPair(temp.getVelocity().getX() + acceleration.getX(), velocity.getY()
-						+ acceleration.getY()));
+				setVel(new XYPair(temp.getVelocity().getX(), temp.getVelocity().getY()));
 			}
+			p.println("Racer accelerated! Acceleration is: (" + acceleration.getX() + ", " + acceleration.getY() + ")");
+			p.println("					  Velocity is now: (" + velocity.getX() + ", " + velocity.getY() + ")");
+			p.println("					  Position moves to: (" + position.getX() + ", " + position.getY() + ")");
 		}
 	}
 
