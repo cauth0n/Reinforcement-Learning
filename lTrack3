@@ -1,0 +1,43 @@
+Total number of states: 469
+Racer moved.
+##########
+#SRSSSS###
+#......###
+##....####
+###...####
+###FF#####
+##########
+Racer pos: 2 1
+Racer vel: 0 0
+Racer moved.
+##########
+#SSSSSS###
+#..R...###
+##....####
+###...####
+###FF#####
+##########
+Racer pos: 3 2
+Racer vel: 1 1
+Racer moved.
+##########
+#SSSSSS###
+#......###
+##..R.####
+###...####
+###FF#####
+##########
+Racer pos: 4 3
+Racer vel: 1 1
+Racer moved.
+##########
+#SSSSSS###
+#......###
+##....####
+###...####
+###FR#####
+##########
+Total time: 1862
+Gamma : 0.8
+L track
+Iterations: 50

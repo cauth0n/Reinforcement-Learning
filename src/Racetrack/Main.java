@@ -14,7 +14,7 @@ public class Main {
 
 	public Main(String directory) {
 
-		String filePath = directory += lTrack;
+		String filePath = directory += practiceTrack;
 
 		try {
 			File file = new File(filePath);
@@ -36,7 +36,7 @@ public class Main {
 			println("Read in values incorrectly -- debug line 30 from Main");
 			e.printStackTrace();
 		}
-		new Simulator(racerLessBoard);
+		new Simulator(racerLessBoard, filePath);
 	}
 	public RaceTrack getTrack(){
 		return racerLessBoard;

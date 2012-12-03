@@ -30,10 +30,10 @@ public class Simulator {
 	private long startTime;
 	private long stopTime;
 
-	public Simulator(RaceTrack racerLessBoard) {
+	public Simulator(RaceTrack racerLessBoard, String filePath) {
 		this.racerlessBoard = racerLessBoard;
 		boundaryLogic = new ConcreteBoundaries(racerlessBoard);
-		p = new Printer("ltrack");
+		p = new Printer("filePath");
 		rows = racerLessBoard.getHeight();
 		cols = racerLessBoard.getWidth();
 		p.printTrack(racerLessBoard);
