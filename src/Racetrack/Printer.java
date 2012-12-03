@@ -42,6 +42,10 @@ public class Printer {
 			i++;
 		}
 	}
+	public void printRacer(Racer racer){
+		println("Racer pos: " + racer.getPos().getX() + " " + racer.getPos().getY());
+		println("Racer vel: " + racer.getVel().getX() + " " + racer.getVel().getY());
+	}
 
 	public void printTrack(RaceTrack raceTrack) {
 		for (int i = 0; i < raceTrack.getWidth(); i++) {

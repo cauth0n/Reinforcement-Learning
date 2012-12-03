@@ -40,7 +40,7 @@ public class Racer {
 
 	private void accelerate(XYPair acceleration) {
 		Random rand = new Random();
-		int randVal = rand.nextInt();
+		int randVal = rand.nextInt(10);
 		if (randVal < 2) {
 			p.println("Racer failed, before set: " + position.getX() + " " + position.getY());
 			RideableState temp = boundaryLogic.failedTransisiton(position, velocity);
@@ -56,9 +56,9 @@ public class Racer {
 		} else {// racer accelerates
 			p.println("Racer success, before set: " + position.getX() + " " + position.getY());
 			RideableState temp = boundaryLogic.transition(position, velocity, acceleration);
-			p.println("Racer success, after set: " + temp.getPosition().getX() + " " + temp.getPosition().getY());
-			p.println("Racer success, after set: " + temp.getVelocity().getX() + " " + temp.getVelocity().getY());
-			p.println("Racer success, after set: " + acceleration.getX() + " " + acceleration.getY());
+			p.println("Racer success, position after set: " + temp.getPosition().getX() + " " + temp.getPosition().getY());
+			p.println("Racer success, velocity after set: " + temp.getVelocity().getX() + " " + temp.getVelocity().getY());
+			p.println("Racer success, acceleration after set: " + acceleration.getX() + " " + acceleration.getY());
 			
 			setPos(new XYPair(temp.getPosition().getX(), temp.getPosition().getY()));
 			//p.println("Racer success, after set: " + position.getX() + " " + position.getY());

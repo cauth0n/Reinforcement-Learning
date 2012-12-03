@@ -76,7 +76,7 @@ public class Simulator {
 		ArrayList<RideableState> allStates = getAllRideableStates();
 		p.println(allStates.size() + "");
 		p.pause();
-		p.printStates(allStates);
+		// p.printStates(allStates);
 		mdp = new MDP(allStates);
 	}
 
@@ -197,6 +197,7 @@ public class Simulator {
 	}
 
 	public void runRacer(ArrayList<Q> qValues) {
+		char lagptr;
 		RaceTrack raceTrack = new RaceTrack(racerlessBoard);
 		XYPair start = pickStart();
 		racer = new Racer(start, boundaryLogic);
@@ -206,6 +207,10 @@ public class Simulator {
 			XYPair vel = racer.getVel();
 			XYPair pos = racer.getPos();
 			int i = 0;
+			p.printRacer(racer);
+			for (int j = 0; j < 10; j++) {
+				p.printState(qValues.get(j).getState());
+			}
 			while (i < qValues.size()) {
 				if (learner.comparer.isSamePosition(qValues.get(i).getState(), pos)) {
 					if (learner.comparer.isSameVelocity(qValues.get(i).getState(), vel)) {
@@ -221,10 +226,14 @@ public class Simulator {
 			}
 
 			Action bestAction = qValues.get(i).getState().getAction(qValues.get(i).getBestActionIndex());
+			p.println("Best action: ");
 			p.printAction(bestAction);
-
+			p.pause();
+			lagptr = racerlessBoard.getTile(racer.getPos().getX(), racer.getPos().getY());
+			XYPair prevPos = racer.getPos();
 			racer.move(bestAction);
 			putRacer(raceTrack);// racer goes to x and y spots on track.
+			raceTrack.setTile(prevPos.getX(), prevPos.getY(), lagptr);
 			p.printTrack(raceTrack);
 			p.pause();
 		}
@@ -239,9 +248,7 @@ public class Simulator {
 			if (in.nextInt() == 1) {
 				runRacer(qValues);
 			}
-			for (int i = 0; i < 5; i++) {
-				p.printQ(qValues.get(i));
-			}
+
 		} catch (InputMismatchException e) {
 			p.println("Wrong input -- continuing");
 		}

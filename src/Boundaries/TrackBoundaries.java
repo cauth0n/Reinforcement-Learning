@@ -1,12 +1,13 @@
 package Boundaries;
 
-import Racetrack.Action;
+import Racetrack.Printer;
 import Racetrack.RaceTrack;
 import Racetrack.RideableState;
 import Racetrack.XYPair;
 
 public abstract class TrackBoundaries implements Boundaries {
 	protected RaceTrack trackTemplate;
+	Printer p = new Printer();
 
 	public TrackBoundaries(RaceTrack raceTrack) {
 		this.trackTemplate = raceTrack;
@@ -146,37 +147,43 @@ public abstract class TrackBoundaries implements Boundaries {
 
 	public boolean smoothYPath(int yOld, int yNew, int xOld) {
 		boolean check = true;
-		while (Math.abs(yNew - yOld) > 0) {
-			if (trackTemplate.getTile(xOld, yOld) == '#') {
-				check = false;
-				break;
+		try {
+			while (yNew != yOld || !check) {
+				//p.println(" yNew + yOld " + yOld + " " + yNew + " " + xOld);
+				if (yNew > yOld) {
+					yOld++;
+				} else {
+					yOld--;
+				}
+				if (trackTemplate.getTile(xOld, yOld) == '#') {
+					check = false;
+					break;
+				}
 			}
-
-			if (yNew > yOld) {
-				yOld++;
-			} else {
-				yOld--;
-			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			check = false;
 		}
-
 		return check;
 	}
 
 	public boolean smoothXPath(int xOld, int xNew, int yOld) {
 		boolean check = true;
-		while (Math.abs(xNew - xOld) > 0) {
-			if (trackTemplate.getTile(xOld, yOld) == '#') {
-				check = false;
-				break;
+		try {
+			while (xNew != xOld || !check) {
+				//p.println(" xNew + xOld " + xOld + " " + xNew + " " + yOld);
+				if (xNew > xOld) {
+					xOld++;
+				} else {
+					xOld--;
+				}
+				if (trackTemplate.getTile(xOld, yOld) == '#') {
+					check = false;
+					break;
+				}
 			}
-
-			if (xNew > xOld) {
-				xOld++;
-			} else {
-				xOld--;
-			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			check = false;
 		}
-
 		return check;
 	}
 }
