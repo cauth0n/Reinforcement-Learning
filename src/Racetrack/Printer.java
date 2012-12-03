@@ -1,28 +1,63 @@
 package Racetrack;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Printer {
+	PrintWriter out;
+	File output;
 
-	public Printer() {
+	public Printer(String fName) {
+		try {
+			output = new File(fName);
+			out = new PrintWriter(output);
+		} catch (FileNotFoundException e) {
 
+		}
+	}
+
+	public void newFile(String name) {
+		try {
+			out.close();
+			output = new File(name);
+			out = new PrintWriter(output);
+		} catch (FileNotFoundException e) {
+
+		}
+	}
+	public void closeWriter(){
+		out.close();
+	}
+
+	public void write(char c) {
+		out.print(c);
+	}
+
+	public void write(String line) {
+		out.print(line);
 	}
 
 	public void print(String line) {
+		write(line);
 		System.out.print(line);
 	}
 
 	public void print(char c) {
+		write(c);
 		System.out.print(c);
 	}
 
 	public void println(String line) {
+		write(line + "\n");
 		System.out.println(line);
 	}
 
 	public void println(char c) {
+		write(c + "\n");
 		System.out.println(c);
 	}
 
@@ -31,7 +66,6 @@ public class Printer {
 		println("Racer Velocity: (" + state.getVelocity().getX() + ", " + state.getVelocity().getY() + ")");
 		println("Racer's actions: ");
 		printActions(state.getActions());
-		// pause();
 	}
 
 	public void printStates(ArrayList<RideableState> states) {
@@ -42,7 +76,8 @@ public class Printer {
 			i++;
 		}
 	}
-	public void printRacer(Racer racer){
+
+	public void printRacer(Racer racer) {
 		println("Racer pos: " + racer.getPos().getX() + " " + racer.getPos().getY());
 		println("Racer vel: " + racer.getVel().getX() + " " + racer.getVel().getY());
 	}
@@ -50,9 +85,9 @@ public class Printer {
 	public void printTrack(RaceTrack raceTrack) {
 		for (int i = 0; i < raceTrack.getHeight(); i++) {
 			for (int j = 0; j < raceTrack.getWidth(); j++) {
-				System.out.print(raceTrack.getTile(i, j) + "");
+				print(raceTrack.getTile(i, j) + "");
 			}
-			System.out.println("");
+			println("");
 		}
 	}
 
@@ -66,8 +101,8 @@ public class Printer {
 	public void printAction(Action action) {
 		println("(" + action.getXAcc() + ", " + action.getYAcc() + ")");
 	}
-	
-	public void printQ(Q qValues){
+
+	public void printQ(Q qValues) {
 		print("State: ");
 		printState(qValues.getState());
 		println("Actions: ");
@@ -80,7 +115,7 @@ public class Printer {
 
 	public void printQs(ArrayList<Q> qValues) {
 		println("Printing Q value pairs");
-		for (Q qValue : qValues){
+		for (Q qValue : qValues) {
 			printQ(qValue);
 		}
 	}

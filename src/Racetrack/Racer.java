@@ -13,12 +13,13 @@ public class Racer {
 	private Boundaries boundaryLogic;
 	private XYPair position;
 	private XYPair velocity;
-	private Printer p;
+
+	// private Printer p;
 
 	public Racer(XYPair position, Boundaries boundaryLogic) {
 		this.position = position;
 		this.boundaryLogic = boundaryLogic;
-		p = new Printer();
+		// p = new Printer();
 		velocity = new XYPair(0, 0);
 	}
 
@@ -52,10 +53,10 @@ public class Racer {
 				reset();// hit a wall.
 
 			}
-			p.println("Racer failed to accelerate. Velocity is now: (" + velocity.getX() + ", " + velocity.getY()
-					+ ")");
-			p.println("							   Position moves to: (" + position.getX() + ", " + position.getY() + ")");
-			
+			// p.println("Racer failed to accelerate. Velocity is now: (" + velocity.getX() + ", " + velocity.getY() +
+			// ")");
+			// p.println("							   Position moves to: (" + position.getX() + ", " + position.getY() + ")");
+
 		} else {// racer accelerates
 
 			RideableState temp = boundaryLogic.transition(position, velocity, acceleration);
@@ -66,9 +67,10 @@ public class Racer {
 			} else {
 				setVel(new XYPair(temp.getVelocity().getX(), temp.getVelocity().getY()));
 			}
-			p.println("Racer accelerated! Acceleration is: (" + acceleration.getX() + ", " + acceleration.getY() + ")");
-			p.println("					  Velocity is now: (" + velocity.getX() + ", " + velocity.getY() + ")");
-			p.println("					  Position moves to: (" + position.getX() + ", " + position.getY() + ")");
+			// p.println("Racer accelerated! Acceleration is: (" + acceleration.getX() + ", " + acceleration.getY() +
+			// ")");
+			// p.println("					  Velocity is now: (" + velocity.getX() + ", " + velocity.getY() + ")");
+			// p.println("					  Position moves to: (" + position.getX() + ", " + position.getY() + ")");
 		}
 	}
 

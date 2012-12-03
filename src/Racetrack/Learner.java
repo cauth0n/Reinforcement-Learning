@@ -15,7 +15,7 @@ public abstract class Learner {
 	protected int movementReward = -1;
 	protected ArrayList<Q> qValues;
 	protected double transitionProb;
-	protected Printer p;
+	//protected Printer p;
 
 	public Learner(MDP mdp, double error, RaceTrack raceTrack, Boundaries boundaryLogic) {
 		this.mdp = mdp;
@@ -24,7 +24,7 @@ public abstract class Learner {
 		this.raceTrack = raceTrack;
 		this.boundaryLogic = boundaryLogic;
 		comparer = new ConcreteRacetrackObjects();
-		p = new Printer();
+		//p = new Printer();
 	}
 
 	public double reward(RideableState state) {
@@ -39,5 +39,6 @@ public abstract class Learner {
 	public ArrayList<Q> getqValues() {
 		return qValues;
 	}
+	
 
 }

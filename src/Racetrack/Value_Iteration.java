@@ -8,10 +8,12 @@ public class Value_Iteration extends Learner {
 	private double delta;
 	private double gamma;
 	private int stateSize;
+	private int iterations;
 
-	public Value_Iteration(MDP mdp, double error, double gamma, RaceTrack raceTrack, Boundaries boundaryLogic) {
+	public Value_Iteration(MDP mdp, double error, double gamma, RaceTrack raceTrack, Boundaries boundaryLogic, int iterations) {
 		super(mdp, error, raceTrack, boundaryLogic);
 		this.gamma = gamma;
+		this.iterations = iterations;
 		stateSize = mdp.getStates().size();
 		qValues = new ArrayList<Q>(stateSize);
 		qValues = logic();
@@ -29,10 +31,10 @@ public class Value_Iteration extends Learner {
 				current.getState().setUtility(bestUtilAtState);
 			}
 			iterator++;
-			p.println(iterator + "");
-		} while (iterator < 50);
+			// p.println(iterator + "");
+		} while (iterator < iterations);
 		// (delta < error * (1 - gamma) * gamma);
-		p.println("Plan generated!!!!");
+		// p.println("Plan generated!!!!");
 		return plan;
 	}
 

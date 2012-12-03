@@ -14,7 +14,7 @@ public class Main {
 
 	public Main(String directory) {
 
-		String filePath = directory += practiceTrack;
+		String filePath = directory += lTrack;
 
 		try {
 			File file = new File(filePath);

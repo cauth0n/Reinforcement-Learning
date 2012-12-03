@@ -15,6 +15,7 @@ public class Simulator {
 	private final int highVelCap = 5;
 	private final double gamma = .9;
 	private final double error = .5;
+	private final int iterations = 50;
 
 	private Boundaries boundaryLogic;
 	private Printer p;
@@ -26,11 +27,13 @@ public class Simulator {
 	private Racer racer;
 	private int rows;
 	private int cols;
+	private long startTime;
+	private long stopTime;
 
 	public Simulator(RaceTrack racerLessBoard) {
 		this.racerlessBoard = racerLessBoard;
 		boundaryLogic = new ConcreteBoundaries(racerlessBoard);
-		p = new Printer();
+		p = new Printer("ltrack");
 		rows = racerLessBoard.getHeight();
 		cols = racerLessBoard.getWidth();
 		p.printTrack(racerLessBoard);
@@ -39,8 +42,18 @@ public class Simulator {
 
 	public void init() {
 		startFinishInit();
-		constructMDP();
-		learn();
+		for (int i = 0; i < 5; i++) {
+			startTime = System.currentTimeMillis();
+			p.newFile("lTrack" + i);
+			constructMDP();
+			learn();
+			stopTime = System.currentTimeMillis();
+			p.println("Total time: " + (stopTime  - startTime));
+			p.println("Gamma : " + .8);
+			p.println("L track");
+			p.println("Iterations: " + iterations);
+		}
+		p.closeWriter();
 	}
 
 	public void putRacer(RaceTrack raceTrack) {
@@ -74,8 +87,7 @@ public class Simulator {
 
 	public void constructMDP() {
 		ArrayList<RideableState> allStates = getAllRideableStates();
-		p.println(allStates.size() + "");
-		p.pause();
+		p.println("Total number of states: " + allStates.size());
 		// p.printStates(allStates);
 		mdp = new MDP(allStates);
 	}
@@ -104,7 +116,6 @@ public class Simulator {
 		ArrayList<RideableState> allStates = new ArrayList<RideableState>();
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-
 				double minDistFromStart = minDistanceFromStart(j, i);
 				if (minDistFromStart == 0) {
 					RideableState temp = new RideableState(new XYPair(j, i), new XYPair(0, 0));
@@ -139,7 +150,6 @@ public class Simulator {
 
 	public double minDistanceFromStart(int x, int y) {
 		double min = Double.MAX_VALUE;
-
 		for (int i = 0; i < start.size(); i++) {
 			double pointDistance = getEuclidianDistance(x, y, start.get(i).getX(), start.get(i).getY());
 			if (pointDistance < min) {
@@ -190,7 +200,7 @@ public class Simulator {
 					raceTrack.setTile(prevPos, lagptr);
 				}
 				p.printTrack(raceTrack);
-				p.pause();
+				// p.pause();
 			}
 		} catch (IndexOutOfBoundsException e) {
 			p.println("Found an invalid state. Could be a bug regarding a failed acc before finish.");
@@ -201,18 +211,15 @@ public class Simulator {
 	}
 
 	public void learn() {
-		learner = new Value_Iteration(mdp, error, gamma, racerlessBoard, boundaryLogic);
-		ArrayList<Q> qValues = learner.getqValues();
-		try {
-			Scanner in = new Scanner(System.in);
-			p.println("Press 1 to run the racer.");
-			if (in.nextInt() == 1) {
-				runRacer(qValues);
-			}
 
-		} catch (InputMismatchException e) {
-			p.println("Wrong input -- continuing");
-		}
+		learner = new Value_Iteration(mdp, error, gamma, racerlessBoard, boundaryLogic, iterations);
+		ArrayList<Q> qValues = learner.getqValues();
+
+		Scanner in = new Scanner(System.in);
+		// p.println("Press 1 to run the racer.");
+		// if (in.nextInt() == 1) {
+		runRacer(qValues);
+		// }
 	}
 
 }

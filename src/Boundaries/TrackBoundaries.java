@@ -1,13 +1,11 @@
 package Boundaries;
 
-import Racetrack.Printer;
 import Racetrack.RaceTrack;
 import Racetrack.RideableState;
 import Racetrack.XYPair;
 
 public abstract class TrackBoundaries implements Boundaries {
 	protected RaceTrack trackTemplate;
-	Printer p = new Printer();
 
 	public TrackBoundaries(RaceTrack raceTrack) {
 		this.trackTemplate = raceTrack;
