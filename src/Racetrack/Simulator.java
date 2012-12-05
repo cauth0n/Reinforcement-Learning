@@ -13,9 +13,9 @@ public class Simulator {
 	private final int highAcc = 1;
 	private final int lowVelCap = -5;
 	private final int highVelCap = 5;
-	private final double gamma = .9;
+	private final double gamma = .8;
 	private final double error = .5;
-	private final int iterations = 50;
+	private final int iterations = 200;
 
 	private Boundaries boundaryLogic;
 	private Printer p;
@@ -42,18 +42,10 @@ public class Simulator {
 
 	public void init() {
 		startFinishInit();
-		for (int i = 0; i < 5; i++) {
-			startTime = System.currentTimeMillis();
-			p.newFile("lTrack" + i);
+
 			constructMDP();
 			learn();
-			stopTime = System.currentTimeMillis();
-			p.println("Total time: " + (stopTime  - startTime));
-			p.println("Gamma : " + .8);
-			p.println("L track");
-			p.println("Iterations: " + iterations);
-		}
-		p.closeWriter();
+
 	}
 
 	public void putRacer(RaceTrack raceTrack) {
@@ -205,7 +197,9 @@ public class Simulator {
 		} catch (IndexOutOfBoundsException e) {
 			p.println("Found an invalid state. Could be a bug regarding a failed acc before finish.");
 			p.println("Instead of repeating the excercise, let's go back to start.");
-			p.println("Going back to start");
+			p.println("But first, here are the first 20 q values we have.");
+			p.printQs(qValues);
+			p.pause();
 			runRacer(qValues);
 		}
 	}
@@ -213,12 +207,33 @@ public class Simulator {
 	public void learn() {
 
 		learner = new Value_Iteration(mdp, error, gamma, racerlessBoard, boundaryLogic, iterations);
+		//learner = new QLearning(mdp, error, gamma, racerlessBoard, boundaryLogic);
 		ArrayList<Q> qValues = learner.getqValues();
 
 		Scanner in = new Scanner(System.in);
 		// p.println("Press 1 to run the racer.");
 		// if (in.nextInt() == 1) {
-		runRacer(qValues);
+		for (int i = 0; i < 1; i++) {
+			startTime = System.currentTimeMillis();
+			p.newFile("lTrack" + i);
+			runRacer(qValues);
+			stopTime = System.currentTimeMillis();
+			p.println("Total time: " + (stopTime  - startTime));
+			p.println("Gamma : " + gamma);
+			p.println("L track");
+			p.println("Iterations: " + iterations);
+		}
+		p.println("");
+		p.println("");
+		p.printQs(qValues);
+		p.println("");
+		p.println("");
+		p.printStates(mdp.getStates());
+		p.println("");
+		p.println("");
+		p.printStates(getAllRideableStates());
+		p.closeWriter();
+
 		// }
 	}
 

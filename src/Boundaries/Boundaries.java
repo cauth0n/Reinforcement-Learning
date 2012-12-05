@@ -1,5 +1,6 @@
 package Boundaries;
 
+import Racetrack.Action;
 import Racetrack.RideableState;
 import Racetrack.XYPair;
 
@@ -40,6 +41,16 @@ public interface Boundaries {
 	 * @return state after successful transition
 	 */
 	public RideableState transition(RideableState state, int actionIndex);
+	
+	/**
+	 * Returns state after a successful Transition -- Velocity and position change
+	 * 
+	 * @param state current state
+	 * @param action action applied to current state
+	 * 
+	 * @return state after action is applied to current state.
+	 */
+	public RideableState transition(RideableState state, Action action);
 	
 	/**
 	 * Returns state after a successful transition -- Velocity and position change.
@@ -95,4 +106,15 @@ public interface Boundaries {
 	 * @return true if a path, false otherwise.
 	 */
 	public boolean smoothXPath(int xOld, int xNew, int yOld);
+	
+	/**
+	 * Checks if an inputted state in on a finish tile.
+	 * 
+	 * @param state current state
+	 * 
+	 * @return true if on a finished state, false otherwise.
+	 */
+	public boolean isFinished(RideableState state);
+	
+
 }

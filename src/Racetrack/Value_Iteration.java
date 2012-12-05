@@ -25,13 +25,14 @@ public class Value_Iteration extends Learner {
 		int iterator = 0;
 		do {
 			delta = 0;
+			System.out.println(iterator + "");
 			for (Q current : plan) {
 				double nextMove = maxAction(current);
 				double bestUtilAtState = reward(current.getState()) + (gamma * nextMove);
 				current.getState().setUtility(bestUtilAtState);
 			}
 			iterator++;
-			// p.println(iterator + "");
+
 		} while (iterator < iterations);
 		// (delta < error * (1 - gamma) * gamma);
 		// p.println("Plan generated!!!!");

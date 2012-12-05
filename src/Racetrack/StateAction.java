@@ -1,24 +1,41 @@
 package Racetrack;
 
 public class StateAction {
-	private State state;
+	private RideableState state;
 	private Action action;
 	private double stateActionVal;
 
-	public StateAction(State state, Action a) {
+	public StateAction(StateAction another) {
+		this(another.getState(), another.getAction());
+	}
+
+	public StateAction(RideableState state) {
+		this.state = state;
+		action = new Action(new XYPair(0, 0));
+	}
+
+	public StateAction(RideableState state, Action a) {
 		this.state = state;
 		this.action = a;
+	}
+
+	public void setState(RideableState state) {
+		this.state = state;
 	}
 
 	public void setStateActionVal(double in) {
 		stateActionVal = in;
 	}
 
+	public void setAction(Action a) {
+		this.action = a;
+	}
+
 	public double getStateActionVal() {
 		return stateActionVal;
 	}
 
-	public State getState() {
+	public RideableState getState() {
 		return state;
 	}
 

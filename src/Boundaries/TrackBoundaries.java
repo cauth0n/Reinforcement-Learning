@@ -1,5 +1,6 @@
 package Boundaries;
 
+import Racetrack.Action;
 import Racetrack.RaceTrack;
 import Racetrack.RideableState;
 import Racetrack.XYPair;
@@ -22,8 +23,11 @@ public abstract class TrackBoundaries implements Boundaries {
 		this.trackTemplate = raceTrack;
 	}
 
-	/* (non-Javadoc)
-	 * @see Boundaries.Boundaries#failedTransisiton(Racetrack.XYPair, Racetrack.XYPair)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see Boundaries.Boundaries#failedTransisiton(Racetrack.XYPair,
+	 * Racetrack.XYPair)
 	 */
 	public RideableState failedTransisiton(XYPair pos, XYPair vel) {
 		XYPair position;
@@ -66,15 +70,20 @@ public abstract class TrackBoundaries implements Boundaries {
 		return newState;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see Boundaries.Boundaries#failedTransition(Racetrack.RideableState)
 	 */
 	public RideableState failedTransition(RideableState state) {
 		return failedTransisiton(state.getPosition(), state.getVelocity());
 	}
 
-	/* (non-Javadoc)
-	 * @see Boundaries.Boundaries#transition(Racetrack.XYPair, Racetrack.XYPair, Racetrack.XYPair)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see Boundaries.Boundaries#transition(Racetrack.XYPair, Racetrack.XYPair,
+	 * Racetrack.XYPair)
 	 */
 	public RideableState transition(XYPair pos, XYPair vel, XYPair accel) {
 		XYPair position;
@@ -120,7 +129,9 @@ public abstract class TrackBoundaries implements Boundaries {
 		return newState;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see Boundaries.Boundaries#transition(Racetrack.RideableState, int)
 	 */
 	public RideableState transition(RideableState state, int actionIndex) {
@@ -129,7 +140,20 @@ public abstract class TrackBoundaries implements Boundaries {
 				.getAction(actionIndex).getAcceleration());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see Boundaries.Boundaries#transition(Racetrack.RideableState,
+	 * Racetrack.Action)
+	 */
+	public RideableState transition(RideableState state, Action action) {
+		return transition(state.getPosition(), state.getVelocity(),
+				action.getAcceleration());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see Boundaries.Boundaries#findYDifference(int, int, int)
 	 */
 	public int findYDifference(int yOld, int yNew, int x) {
@@ -153,7 +177,9 @@ public abstract class TrackBoundaries implements Boundaries {
 		return stop;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see Boundaries.Boundaries#findXDifference(int, int, int)
 	 */
 	public int findXDifference(int xOld, int xNew, int y) {
@@ -177,7 +203,9 @@ public abstract class TrackBoundaries implements Boundaries {
 		return stop;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see Boundaries.Boundaries#smoothYPath(int, int, int)
 	 */
 	public boolean smoothYPath(int yOld, int yNew, int x) {
@@ -201,7 +229,9 @@ public abstract class TrackBoundaries implements Boundaries {
 		return check;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see Boundaries.Boundaries#smoothXPath(int, int, int)
 	 */
 	public boolean smoothXPath(int xOld, int xNew, int yOld) {
@@ -224,4 +254,16 @@ public abstract class TrackBoundaries implements Boundaries {
 		}
 		return check;
 	}
+
+	/* (non-Javadoc)
+	 * @see Boundaries.Boundaries#isFinished(Racetrack.RideableState)
+	 */
+	public boolean isFinished(RideableState state) {
+		boolean check = false;
+		if (trackTemplate.getTile(state.getPosition()) == 'F') {
+			check = true;
+		}
+		return check;
+	}
+
 }

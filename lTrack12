@@ -11,6 +11,24 @@ Racer moved.
 ######
 #S..F#
 #S..F#
+#S..F#
+#R..F#
+######
+Racer pos: 1 4
+Racer vel: 0 0
+Racer moved.
+######
+#S..F#
+#S..F#
+#S..F#
+#R..F#
+######
+Racer pos: 1 4
+Racer vel: 0 0
+Racer moved.
+######
+#S..F#
+#S..F#
 #SR.F#
 #S..F#
 ######
@@ -23,7 +41,7 @@ Racer moved.
 #S..F#
 #S..F#
 ######
-Total time: 16
+Total time: 0
 Gamma : 0.8
 L track
 Iterations: 200
