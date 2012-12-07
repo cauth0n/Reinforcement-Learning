@@ -5,23 +5,19 @@ import Racetrack.RaceTrack;
 import Racetrack.RideableState;
 import Racetrack.XYPair;
 
-/**
- * Track boundaries class -- implements Boundaries for the race track problem.
- * 
- * @author derek.reimanis
- * 
- */
-public abstract class TrackBoundaries implements Boundaries {
+public abstract class TrackBoundariesReset implements Boundaries {
+
 	protected RaceTrack trackTemplate;
+	protected XYPair reset;
 
 	/**
 	 * Constructor -- holds the race track specific to this implementation.
 	 * 
 	 * @param raceTrack
 	 */
-	public TrackBoundaries(RaceTrack raceTrack) {
+	public TrackBoundariesReset(RaceTrack raceTrack, XYPair reset) {
 		this.trackTemplate = raceTrack;
-
+		this.reset = reset;
 	}
 
 	/*
@@ -42,8 +38,8 @@ public abstract class TrackBoundaries implements Boundaries {
 				position = new XYPair(newXPos, newYPos);// works!
 				velocity = new XYPair(vel.getX(), vel.getY());
 			} else {// x worked, but y didn't.
-				int diff = findYDifference(yOld, newYPos, newXPos);
-				position = new XYPair(newXPos, diff);
+				// XYPair val = findYDifference(yOld, newYPos, newXPos);
+				position = new XYPair(reset);
 				velocity = new XYPair(0, 0);
 			}
 		} else {// x didn't work
@@ -54,14 +50,14 @@ public abstract class TrackBoundaries implements Boundaries {
 					position = new XYPair(newXPos, newYPos);
 					velocity = new XYPair(vel.getX(), vel.getY());
 				} else {
-					int diff = findXDifference(xOld, newXPos, newYPos);
-					position = new XYPair(diff, newYPos);
+					// XYPair val = findXDifference(xOld, newXPos, newYPos);
+					position = new XYPair(reset);
 					velocity = new XYPair(0, 0);
 				}
 			} else {// neither works.
-				int xDiff = findXDifference(xOld, newXPos, yOld);
+				// XYPair val = findXDifference(xOld, newXPos, yOld);
 				// int yDiff = findYDifference(yOld, newYPos, xDiff);
-				position = new XYPair(xDiff, yOld);
+				position = new XYPair(reset);
 				velocity = new XYPair(0, 0);
 			}
 		}
@@ -101,8 +97,8 @@ public abstract class TrackBoundaries implements Boundaries {
 				velocity = new XYPair(newXVel, newYVel);
 
 			} else {// x worked, but y didn't.
-				int diff = findYDifference(yOld, newYPos, newXPos);
-				position = new XYPair(newXPos, diff);
+				// XYPair val = findYDifference(yOld, newYPos, newXPos);
+				position = new XYPair(reset);
 				velocity = new XYPair(0, 0);
 			}
 		} else {// x didn't work
@@ -113,14 +109,14 @@ public abstract class TrackBoundaries implements Boundaries {
 					position = new XYPair(newXPos, newYPos);
 					velocity = new XYPair(newXVel, newYVel);
 				} else {
-					int diff = findXDifference(xOld, newXPos, newYPos);
-					position = new XYPair(diff, newYPos);
+					// XYPair val = findXDifference(xOld, newXPos, newYPos);
+					position = new XYPair(reset);
 					velocity = new XYPair(0, 0);
 				}
 			} else {// neither works.
-				int xDiff = findXDifference(xOld, newXPos, yOld);
+				// XYPair val = findXDifference(xOld, newXPos, yOld);
 				// int yDiff = findYDifference(yOld, newYPos, xDiff);
-				position = new XYPair(xDiff, yOld);
+				position = new XYPair(reset);
 				velocity = new XYPair(0, 0);
 			}
 		}
@@ -170,6 +166,7 @@ public abstract class TrackBoundaries implements Boundaries {
 				yOld--;
 			}
 		}
+
 		return stop;
 	}
 

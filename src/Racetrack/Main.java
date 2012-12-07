@@ -31,7 +31,7 @@ public class Main {
 	 */
 	public Main() {
 
-		String filePath = practiceTrack;
+		String filePath = rTrack;
 
 		try {
 			File file = new File(filePath);

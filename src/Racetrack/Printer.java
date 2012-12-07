@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Printer {
@@ -29,7 +30,8 @@ public class Printer {
 
 		}
 	}
-	public void closeWriter(){
+
+	public void closeWriter() {
 		out.close();
 	}
 
@@ -130,6 +132,15 @@ public class Printer {
 			}
 		} catch (InputMismatchException e) {
 			println("Wrong input -- continuing");
+		}
+	}
+
+	public void printSequence(LinkedList<StateAction> sequence) {
+		for (StateAction stateAction : sequence) {
+			println("State:");
+			printState(stateAction.getState());
+			println("Action:");
+			printAction(stateAction.getAction());
 		}
 	}
 

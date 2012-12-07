@@ -12,7 +12,7 @@ import ObjectComparisons.ObjectComparisons;
  * Provides common instances for any reinforcement learning class that may inherit from here.
  * 
  * @author derek.reimanis
- *
+ * 
  */
 public abstract class Learner {
 	protected Boundaries boundaryLogic;
@@ -23,17 +23,21 @@ public abstract class Learner {
 	protected int movementReward = -1;
 	protected ArrayList<Q> qValues;
 	protected double transitionProb;
-	//protected Printer p;
+
+	// protected Printer p;
 
 	/**
-	 * Constructor -- Includes a raceTrack, a markov decision process, some error value 
-	 * corresponding to acceptable error after iterations, and a definition for what happens
-	 * when we hit a wall
+	 * Constructor -- Includes a raceTrack, a markov decision process, some error value corresponding to acceptable
+	 * error after iterations, and a definition for what happens when we hit a wall
 	 * 
-	 * @param mdp Markov decision process of states
-	 * @param error acceptable degree of error after some iteration
-	 * @param raceTrack track in which the learner will move.
-	 * @param boundaryLogic what happens when we hit a wall.
+	 * @param mdp
+	 *            Markov decision process of states
+	 * @param error
+	 *            acceptable degree of error after some iteration
+	 * @param raceTrack
+	 *            track in which the learner will move.
+	 * @param boundaryLogic
+	 *            what happens when we hit a wall.
 	 */
 	public Learner(MDP mdp, double error, RaceTrack raceTrack, Boundaries boundaryLogic) {
 		this.mdp = mdp;
@@ -42,13 +46,14 @@ public abstract class Learner {
 		this.raceTrack = raceTrack;
 		this.boundaryLogic = boundaryLogic;
 		comparer = new ConcreteRacetrackObjects();
-		//p = new Printer();
+		// p = new Printer();
 	}
 
 	/**
 	 * Reward for any state
 	 * 
-	 * @param state current state of which we want the valu of
+	 * @param state
+	 *            current state of which we want the valu of
 	 * 
 	 * @return 1 if finish state, else -1
 	 */
@@ -69,6 +74,12 @@ public abstract class Learner {
 	public ArrayList<Q> getqValues() {
 		return qValues;
 	}
-	
 
+	public ArrayList<Q> getQ() {
+		ArrayList<Q> getQValues = new ArrayList<Q>(mdp.getStates().size());
+		for (int i = 0; i < mdp.getStates().size(); i++) {
+			getQValues.add(new Q(mdp.getStates().get(i)));
+		}
+		return getQValues;
+	}
 }

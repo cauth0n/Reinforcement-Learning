@@ -19,6 +19,7 @@ public class Racer {
 	public Racer(XYPair position, Boundaries boundaryLogic) {
 		this.position = position;
 		this.boundaryLogic = boundaryLogic;
+
 		// p = new Printer();
 		velocity = new XYPair(0, 0);
 	}
@@ -32,20 +33,24 @@ public class Racer {
 	}
 
 	public void setVel(XYPair vel) {
-		velocity = vel;
+		velocity = new XYPair(vel);
 	}
 
 	public void setPos(XYPair pos) {
-		position = pos;
+		position = new XYPair(pos);
 	}
 
 	private void accelerate(XYPair acceleration) {
 		Random rand = new Random();
 		int randVal = rand.nextInt(10);
 		if (randVal < 2) {
+			RideableState temp;
 
-			RideableState temp = boundaryLogic.failedTransisiton(position, velocity);
-
+			// if (startOver) {
+			temp = boundaryLogic.failedTransisiton(position, velocity);
+			// } else {
+			// temp = boundaryLogic.failedTransisiton(position, velocity);
+			// }
 			// racer does not accelerate.
 			setPos(new XYPair(temp.getPosition().getX(), temp.getPosition().getY()));
 
@@ -59,9 +64,15 @@ public class Racer {
 
 		} else {// racer accelerates
 
-			RideableState temp = boundaryLogic.transition(position, velocity, acceleration);
+			RideableState temp;
 
+			// if (startOver) {
+			temp = boundaryLogic.transition(position, velocity, acceleration);
+			// } else {
+			// temp = boundaryLogic.transition(position, velocity, acceleration);
+			// }
 			setPos(new XYPair(temp.getPosition().getX(), temp.getPosition().getY()));
+
 			if (temp.getVelocity().getX() == 0 && temp.getVelocity().getY() == 0) {
 				reset();
 			} else {

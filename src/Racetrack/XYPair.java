@@ -9,6 +9,10 @@ public class XYPair {
 		this.y = y;
 	}
 
+	public XYPair(XYPair another) {
+		this(another.getX(), another.getY());
+	}
+
 	public int getX() {
 		return x;
 	}

@@ -1,21 +1,22 @@
 package Racetrack;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
 import Boundaries.Boundaries;
 import Boundaries.ConcreteBoundaries;
+import Boundaries.ConcreteBoundariesReset;
 
 public class Simulator {
 	private final int lowAcc = -1;
 	private final int highAcc = 1;
 	private final int lowVelCap = -5;
 	private final int highVelCap = 5;
-	private final double gamma = .8;
 	private final double error = .5;
-	private final int iterations = 200;
+
+	private final double alpha = .5;
 
 	private Boundaries boundaryLogic;
 	private Printer p;
@@ -29,10 +30,12 @@ public class Simulator {
 	private int cols;
 	private long startTime;
 	private long stopTime;
+	private double gamma = .2;
+	private int iterations = 50;
 
 	public Simulator(RaceTrack racerLessBoard, String filePath) {
 		this.racerlessBoard = racerLessBoard;
-		boundaryLogic = new ConcreteBoundaries(racerlessBoard);
+
 		p = new Printer("filePath");
 		rows = racerLessBoard.getHeight();
 		cols = racerLessBoard.getWidth();
@@ -43,8 +46,8 @@ public class Simulator {
 	public void init() {
 		startFinishInit();
 
-			constructMDP();
-			learn();
+		constructMDP();
+		learn();
 
 	}
 
@@ -56,7 +59,8 @@ public class Simulator {
 
 	public XYPair pickStart() {
 		Random rand = new Random();
-		return start.get(rand.nextInt(start.size()));
+		//return start.get(rand.nextInt(start.size()));
+		return start.get(0);
 	}
 
 	public void startFinishInit() {
@@ -74,6 +78,7 @@ public class Simulator {
 		}
 		if (start.isEmpty() || finish.isEmpty()) {
 			p.println("No start or finish state found.");
+			p.pause();
 		}
 	}
 
@@ -141,9 +146,9 @@ public class Simulator {
 	}
 
 	public double minDistanceFromStart(int x, int y) {
-		double min = Double.MAX_VALUE;
+		double min = 9999;
 		for (int i = 0; i < start.size(); i++) {
-			double pointDistance = getEuclidianDistance(x, y, start.get(i).getX(), start.get(i).getY());
+			double pointDistance = getEuclidianDistance(y, x, start.get(i).getY(), start.get(i).getX());
 			if (pointDistance < min) {
 				min = pointDistance;
 			}
@@ -162,79 +167,146 @@ public class Simulator {
 	}
 
 	public void runRacer(ArrayList<Q> qValues) {
+		int counter = 0;
+		int minSteps = 2000;
+		int maxSteps = -2000;
 		char lagptr;
-		RaceTrack raceTrack = new RaceTrack(racerlessBoard);
+		List<Integer> moveList = new ArrayList<Integer>();
 		XYPair start = pickStart();
-		racer = new Racer(start, boundaryLogic);
-		putRacer(raceTrack);
-		p.printTrack(raceTrack);
+
 		try {
-			while (racerlessBoard.getTile(racer.getPos()) != 'F') {
-				XYPair vel = racer.getVel();
-				XYPair pos = racer.getPos();
-				int i = 0;
-				p.printRacer(racer);
-				while (i < qValues.size()) {
-					if (learner.comparer.isSamePosition(qValues.get(i).getState(), pos)) {
-						if (learner.comparer.isSameVelocity(qValues.get(i).getState(), vel)) {
-							break;
-						}
+			for (int k = 0; k < 100; k++) {
+				RaceTrack raceTrack = new RaceTrack(racerlessBoard);
+				racer = new Racer(start, boundaryLogic);
+				putRacer(raceTrack);
+				p.printTrack(raceTrack);
+				counter = 0;
+
+				while (racerlessBoard.getTile(racer.getPos()) != 'F') {
+					XYPair vel = racer.getVel();
+					XYPair pos = racer.getPos();
+					int i = 0;
+					p.printRacer(racer);
+					if (racer.getPos().getX() == start.getX() && racer.getPos().getY() == start.getY()) {
+						racer.reset();
+						p.println("Moved to: ");
+						p.printRacer(racer);
 					}
-					i++;
+					while (i < qValues.size()) {
+						if (learner.comparer.isSamePosition(qValues.get(i).getState(), pos)) {
+							if (learner.comparer.isSameVelocity(qValues.get(i).getState(), vel)) {
+								break;
+							}
+						}
+						i++;
+					}
+					// for (int j = 0; j < 10; j++) {
+					// p.printQ(qValues.get(j));
+					// }
+
+					Action bestAction = qValues.get(i).getState().getAction(qValues.get(i).getBestActionIndex());
+					p.printAction(bestAction);
+					// p.pause();
+					lagptr = racerlessBoard.getTile(racer.getPos());
+					XYPair prevPos = racer.getPos();
+					racer.move(bestAction);
+					counter++;
+					putRacer(raceTrack);// racer goes to x and y spots on track.
+					if (!(prevPos.getX() == racer.getPos().getX() && prevPos.getY() == racer.getPos().getY())) {
+						raceTrack.setTile(prevPos, lagptr);
+					}
+					p.printTrack(raceTrack);
+					// p.pause();
+				}
+				moveList.add(counter);
+				if (counter < minSteps) {
+					minSteps = counter;
+				}
+				if (counter > maxSteps) {
+					maxSteps = counter;
 				}
 
-				Action bestAction = qValues.get(i).getState().getAction(qValues.get(i).getBestActionIndex());
-				lagptr = racerlessBoard.getTile(racer.getPos());
-				XYPair prevPos = racer.getPos();
-				racer.move(bestAction);
-				putRacer(raceTrack);// racer goes to x and y spots on track.
-				if (!(prevPos.getX() == racer.getPos().getX() && prevPos.getY() == racer.getPos().getY())) {
-					raceTrack.setTile(prevPos, lagptr);
-				}
-				p.printTrack(raceTrack);
-				// p.pause();
 			}
 		} catch (IndexOutOfBoundsException e) {
 			p.println("Found an invalid state. Could be a bug regarding a failed acc before finish.");
 			p.println("Instead of repeating the excercise, let's go back to start.");
 			p.println("But first, here are the first 20 q values we have.");
 			p.printQs(qValues);
-			p.pause();
-			runRacer(qValues);
+			Scanner in = new Scanner(System.in);
+			p.println("Press 1 to try again");
+			if (in.nextInt() == 1) {
+				runRacer(qValues);
+			}
 		}
+
+		p.println("Max steps: " + maxSteps);
+		p.println("Min steps: " + minSteps);
+		p.println("Average steps: " + mean(moveList));
+		p.println("Standard deviation: " + sd(moveList));
+	}
+
+	public double mean(List<Integer> list) {
+		int sum = 0;
+		for (Integer n : list) {
+			sum += n.intValue();
+		}
+		return ((double) sum / list.size());
+	}
+
+	public double sd(List<Integer> list) {
+		int sum = 0;
+		double mean = mean(list);
+		for (Integer n : list) {
+			sum += Math.pow((n.intValue() - mean), 2);
+		}
+		return Math.sqrt((double) sum / (list.size() - 1));
 	}
 
 	public void learn() {
-
-		learner = new Value_Iteration(mdp, error, gamma, racerlessBoard, boundaryLogic, iterations);
-		//learner = new QLearning(mdp, error, gamma, racerlessBoard, boundaryLogic);
-		ArrayList<Q> qValues = learner.getqValues();
-
-		Scanner in = new Scanner(System.in);
-		// p.println("Press 1 to run the racer.");
-		// if (in.nextInt() == 1) {
+		boolean startOver = true;
 		for (int i = 0; i < 1; i++) {
+			if (i == 1) {
+				gamma = .5;
+			} else if (i == 2) {
+				gamma = .7;
+			} else if (i == 3) {
+				gamma = .8;
+			} else if (i == 4) {
+				gamma = .9;
+			}
+			if (startOver) {
+				boundaryLogic = new ConcreteBoundariesReset(racerlessBoard, start.get(0));
+			} else {
+				boundaryLogic = new ConcreteBoundaries(racerlessBoard);
+			}
 			startTime = System.currentTimeMillis();
-			p.newFile("lTrack" + i);
+			learner = new Value_Iteration(mdp, error, gamma, racerlessBoard, boundaryLogic, iterations);
+			// learner = new QLearning(mdp, error, gamma, racerlessBoard, boundaryLogic, alpha);
+			ArrayList<Q> qValues = learner.getqValues();
+
+			// Scanner in = new Scanner(System.in);
+			// p.println("Press 1 to run the racer.");
+			// if (in.nextInt() == 1) {
+
+			p.newFile("1Track" + i);
 			runRacer(qValues);
 			stopTime = System.currentTimeMillis();
-			p.println("Total time: " + (stopTime  - startTime));
+			p.println("Total time: " + (stopTime - startTime));
 			p.println("Gamma : " + gamma);
-			p.println("L track");
 			p.println("Iterations: " + iterations);
 		}
-		p.println("");
-		p.println("");
-		p.printQs(qValues);
-		p.println("");
-		p.println("");
-		p.printStates(mdp.getStates());
-		p.println("");
-		p.println("");
-		p.printStates(getAllRideableStates());
 		p.closeWriter();
+		// p.println("");
+		// p.println("");
+		// p.printQs(qValues);
+		// p.println("");
+		// p.println("");
+		// p.printStates(mdp.getStates());
+		// p.println("");
+		// p.println("");
+		// p.printStates(getAllRideableStates());
+		// p.closeWriter();
 
 		// }
 	}
-
 }
